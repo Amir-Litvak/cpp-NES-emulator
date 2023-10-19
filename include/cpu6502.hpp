@@ -15,6 +15,7 @@ namespace nes
         cpu6502();
         ~cpu6502();
 
+
         /* Link this CPU to a communications bus */
         void ConnectBus(Bus *n) { bus = n; }
  
@@ -68,6 +69,18 @@ namespace nes
     private:
         Bus *bus = nullptr;
 
+        /* Fetch data from appropriate source */
+        void fetch();
+
+        uint8_t  fetched     = 0x00;    /* Represents the working input value to the ALU */
+        uint16_t temp        = 0x0000;  /* A convenience variable used everywhere */
+        uint16_t addr_abs    = 0x0000;  /* All used memory addresses end up in here */
+        uint16_t addr_rel    = 0x00;    /* Represents absolute address following a branch */
+        uint8_t  opcode      = 0x00;    /* Is the instruction byte */
+        uint8_t  cycles      = 0;	    /* Counts how many cycles the instruction has remaining */
+        uint32_t clock_count = 0;	    /* A global accumulation of the number of clocks */
+
+
         struct INSTRUCTION
         {
             std::string name;		
@@ -75,7 +88,7 @@ namespace nes
             uint8_t     (cpu6502::*addrmode)(void) = nullptr;
             uint8_t     cycles = 0;
         };
-        std::vector<INSTRUCTION> lut;
+        std::vector<INSTRUCTION> opcodes_lut;
 
         uint8_t read(uint16_t addr);
         void write(uint16_t addr, uint8_t data);
