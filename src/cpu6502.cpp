@@ -42,5 +42,47 @@ namespace nes
     {
         bus->write(addr, data);
     }
+
+    uint8_t cpu6502::GetFlag(FLAGS6502 f)
+    {
+        return ((status & f) > 0) ? 1 : 0;
+    }
+
+    void cpu6502::SetFlag(FLAGS6502 f, bool v)
+    {
+        if(v)
+        {
+            status |= f;
+        }
+        else
+        {
+            status &= ~f;
+        }
+            
+    }
+
+    void cpu6502::clock()
+    {
+        if(0 == cycles)
+        {
+            uint8_t additional_cycles_addr = 0x00;
+            uint8_t additional_cycles_op = 0x00;
+            
+            opcode = read(pc);
+            ++pc;
+
+            cycles = opcodes_lut[opcode].cycles;
+
+            additional_cycles_addr = (this->*opcodes_lut[opcode].addrmode)();
+            additional_cycles_op = (this->*opcodes_lut[opcode].operate)();
+
+            cycles += (additional_cycles_addr & additional_cycles_op);
+
+        }
+
+        --cycles;
+    }
+
+    
 }
 

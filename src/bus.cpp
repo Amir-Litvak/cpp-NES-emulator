@@ -1,4 +1,3 @@
-
 #include "bus.hpp"
 
 namespace nes
