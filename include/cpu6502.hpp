@@ -3,8 +3,6 @@
 #include <string>
 #include <map>
 
-#include "bus.hpp"
-
 namespace nes
 {
     class Bus; /* Forward declaration of generic communications bus class to prevent circular inclusions */

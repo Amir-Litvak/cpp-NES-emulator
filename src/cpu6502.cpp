@@ -1,6 +1,5 @@
-
-
 #include "cpu6502.hpp"
+#include "bus.hpp"
 
 namespace nes
 {
@@ -82,6 +81,22 @@ namespace nes
 
         --cycles;
     }
+
+    uint8_t cpu6502::IMP()
+    {
+        fetched = a;
+                
+        return 0;
+    }
+
+    uint8_t cpu6502::IMM()
+    {
+        addr_abs = pc++;
+
+        return 0;
+    }
+
+    
 
     
 }
